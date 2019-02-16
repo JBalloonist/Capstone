@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.pdf
+.DS_Store
+.Rapp.history
+*.html
+*.ipynb
+Course_ 2018-1001 KSB 620 Analytics Practicum 1 - Capital One_files
