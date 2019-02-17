@@ -18,52 +18,8 @@ library(tidyr)
 data <- read.csv('~/Dropbox/MSAn Capstone - Fall 2018/Data/3. 100K Sampled Data/FINAL2_SAMPLED100.csv', 
                  na.strings=c("NA","NaN", " ", ""))
 
-
-##--------------------------------------------------------------##
-## Intro to DPLYR                           --------------------##
-##--------------------------------------------------------------##
-
-#---SELECT certain variables in a data frame  -------------------------------------------
-data.1 <- data %>% 
-  select(RESP, days_since_last_activity, V90, Upmarket )
-
-#---DROP (-SELECT) certain variables in a data frame  -------------------------------------------
-data.2 <- data.1 %>% 
-  select(-V90, -Upmarket)
-
-#---FILTER data frame based on conditions  -------------------------------------------
-data.RESP <- data %>% 
-  filter(RESP==1)
-
-#---CREATE NEW VARIABLES  -------------------------------------------
-data.3 <- data.1 %>% 
-  mutate(recent_active = ifelse(days_since_last_activity<365, 1, 0))
-
-#---Create SUMMARY METRICS by GROUP --------------------------------------------------
-data.4 <- data.1 %>% 
-  group_by(Upmarket) %>% 
-  summarise(avg_RESP = mean(RESP, na.rm=T))
-
-print(data.4)
-
-##--------------------------------------------------------------##
-## Missing Imputation                       --------------------##
-##--------------------------------------------------------------##
-
-#---Explore MISSING VARIABLES -------------------------------------------------------
-# missing_values <- data %>% 
-#   summarise_all(funs(sum(is.na(.))/n())) %>% 
-#   gather(key="feature", value="missing_pct")
-# 
-# missing_values %>% 
-#   ggplot(aes(x=reorder(feature,-missing_pct),y=missing_pct)) +
-#   geom_bar(stat="identity",fill="steelblue")+
-#   coord_flip()+
-#   theme_few()
-
 #---Remove variables with X% missing (constant)--------------------------------
 data.5 <- removeConstantFeatures(data, perc=0.01) #99% the same value
-
 
 #----Explore the 'Class' Types in your Data---------------------------------------
 
