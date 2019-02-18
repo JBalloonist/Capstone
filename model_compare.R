@@ -11,10 +11,7 @@ library(mlr)
 library(readr)
 library(tidyr)
 
-
-##--------------------------------------------------------------##
 ## Read In Data                             --------------------##
-##--------------------------------------------------------------##
 data <- read.csv('~/Dropbox/MSAn Capstone - Fall 2018/Data/3. 100K Sampled Data/FINAL2_SAMPLED100.csv', 
                  na.strings=c("NA","NaN", " ", ""))
 
@@ -90,18 +87,13 @@ for (i in 1:(length(VAR_LIST))) {
 list <- list[order(-list$abs.Corr),]
 kable(list, caption = "Pearson Correlation Coefficients w/RESP ")
 
+# Create test and training data sets
+set.seed(1)
+train <- sample(1:nrow(df), 0.8*nrow(df))
+df.train <- df[train, ]
+df.test <- df[-train, ]
 
-# library(GGally)
-# 
-# top_10 <- c("RESP", "days_since_last_activity", "Upmarket", "V90_1", "V138_1", "V61", "V162", "V138_7", "V86_K", 
-#             "V161_E1", "V138_2")
-# 
-# library(corrplot)
-# ggpairs(df[, top_10])
-# # corrplot(df[, top_10])
-# test <- df[,top_10]
-# ggpairs(test)
-# corrplot(test, method = 'circle') 
+# Create models below
 
 
 
