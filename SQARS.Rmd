@@ -1,0 +1,161 @@
+---
+title: "Email Marketing at Capital OneITEC 621 - Homework 2 - Regression Refresher and Data Pre-Processing"
+author: "Shawn Newman"
+date: "Month dd, yyyy"
+output: html_document
+---
+
+<span style="color:blue">*Note: save this file with the name HW1_YourLastName.Rmd [or HW2, etc.) and complete your homework in it.*</span>
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+options(java.parameters = "-Xmx8g")
+options("stringsAsFactors" = FALSE)
+options(pillar.subtle_num = FALSE)
+options(scipen=999)
+library(dplyr)
+library(mlr)
+library(tidyr)
+library(knitr)
+library(fastDummies)
+```
+
+
+**1.1 Read in Data.** We began by reading in the data to R.
+
+```{r}
+data <- read.csv('C:/Users/shawn/Documents/KSB 620/FINAL2_SAMPLED100.TXT',
+                 na.strings=c("NA","NaN", " ", ""))
+```
+
+**1.2 Remove missing data.** We next removed the variables where 99% of the data was the same.
+
+```{r}
+#---Remove variables with 99% missing (constant)--------------------------------
+data.1 <- removeConstantFeatures(data, perc=0.01) #99% the same value
+
+```
+
+1.3 **SElect desired data** Next we selected the desired data fields that we will be working with.
+
+```{r}
+data.2 <- data.1 %>%
+  select(RESP, days_since_last_activity, State, Upmarket, V42, V48, V88, V90, V140,V272,V274,V276,V278, MATCH)
+```
+
+1.4 **Impute missing data** We imputed the median Impute Missings w/Mean & Mode
+
+```{r}
+imp <- mlr::impute(data.2, classes = list(numeric=imputeMedian(),integer = imputeMedian()),
+                   dummy.classes = c("character", "numeric", "integer"), dummy.type = "numeric") #You can include this or not
+
+data.noMiss <- imp$data
+```
+
+1.5 **CReate Dummy Variables** YEs, there appears to be a gender pay gap with women earning less mean salary than men.
+
+```{r}
+#to_dummy <- c('V57', 'V90', 'V48', 'V41', 'V42', 'V138', 'V85', 'V47', 'V86', 'V160', 'V161', 'V159')
+#to_dummy <- c('V3', 'V4', 'V7', 'V9', 'V10', 'V12', 'V13', 'V14', 'V15', 'V29', 'V30', 'V31', 'V32', 'V35', 'V36', 'V38', 'V40', 'V41', 'V42', 'V43')
+to_dummy <- c('V140','V90','V88','V48','V42')
+
+# convert to dummy variables and check the data
+data_dummies <- fastDummies::dummy_cols(data.noMiss, select_columns = to_dummy)
+head(data_dummies)
+tail(data_dummies)
+
+# get rid of the original columns that were made into dummy variables
+list_to_keep <- setdiff(names(data_dummies), to_dummy)
+data_dummies <- data_dummies[ , list_to_keep]
+
+#Keep just numeric/integer
+df<-data_dummies %>%
+  select_if(is.numeric) %>%
+  filter(MATCH == 1)
+```
+
+4. **lm() model, all variables **
+
+```{r}
+
+```
+
+5. **lm() model, 5 variables **
+
+```{r}
+```
+
+6. **Object's class**
+
+```{r}
+```
+
+7. **What do these classes mean?**
+
+```{r}
+```
+
+8. **Income.vect**
+
+```{r}
+```
+
+9. **Mean, minimum, maximum, standard deviation and variance**
+
+```{r}
+```
+
+10. **Income.stats** 
+
+```{r}
+```
+
+11. **Vector Names**
+
+```{r}
+```
+
+12. **5% Inflation**
+
+```{r}
+```
+
+13. **Income Boxplot**
+
+```{r}
+```
+
+14. **Income by Gender Boxplot**
+
+```{r}
+```
+
+15. **Plot Credit Rating vs. Income**
+
+```{r}
+```
+
+16. **Credit Rating Histogram**
+
+```{r}
+```
+
+17. **Credit Rating qqplot** 
+
+```{r}
+```
+
+18. **Is data normally distributed? Why or why not?**
+
+```{r}
+```
+
+19. **ggplot2 Histogram**
+
+```{r}
+```
+
+20. **Dual Line Plot**
+
+```{r}
+```
