@@ -10,6 +10,7 @@ library(dplyr)
 library(mlr)
 library(readr)
 library(tidyr)
+library(MASS)
 
 ## Read In Data                             --------------------##
 data <- read.csv('~/Dropbox/MSAn Capstone - Fall 2018/Data/3. 100K Sampled Data/FINAL2_SAMPLED100.csv', 
@@ -94,14 +95,46 @@ df.train <- df[train, ]
 df.test <- df[-train, ]
 
 # Create models below
-
 fit.logit <- glm(RESP ~ ., data=df, family = binomial(link="logit"))
 summary(fit.logit)
 
-# get top variables for 
+# get top variables for the logistic model
+# https://stackoverflow.com/questions/16153497/selecting-the-statistically-significant-variables-in-an-r-glm-model?rq=1
 top_selection.logit <- summary(fit.logit)$coeff[-1,4] < 0.05
 top_names.logit <- names(top_selection)[top_selection == TRUE]
 top_names.logit
+
+# LDA model 
+remove_constant <- df[, -c(12, 74)] # remove these since they are constant and LDA does not work
+lda.fit <- lda(RESP ~ ., data=remove_constant) # getting warning that variables are collinear
+summary(lda.fit)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
