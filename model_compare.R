@@ -95,11 +95,13 @@ df.test <- df[-train, ]
 
 # Create models below
 
+fit.logit <- glm(RESP ~ ., data=df, family = binomial(link="logit"))
+summary(fit.logit)
 
-
-
-
-
+# get top variables for 
+top_selection.logit <- summary(fit.logit)$coeff[-1,4] < 0.05
+top_names.logit <- names(top_selection)[top_selection == TRUE]
+top_names.logit
 
 
 
